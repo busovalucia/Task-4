@@ -1,0 +1,88 @@
+---
+title: "Task 4"
+author: "BusovaLucia"
+date: "2025-12-09"
+output: html_document
+---
+```{r}
+### 4.1. The “Greeting” Function
+
+welcome_to_midwest_universe <- function(your_name) {
+  cat("--------------------------------\n")
+  cat("Analysis Toolkit for the Midwest Dataset\n")
+  cat("Report prepared by:", your_name, "\n")
+  cat("--------------------------------\n\n")
+}
+
+# Call the function
+welcome_to_midwest_universe("Lucia Bušová")
+
+```
+```{r}
+### 4.2. The “Loading” Function
+
+library(dplyr)
+library(ggplot2)
+
+load_and_inspect <- function() {
+  data(midwest)
+  cat("--- Data loaded successfully: midwest dataset ---\n\n")
+  print(glimpse(midwest))
+  cat("\n--- First 6 Rows ---\n")
+  print(head(midwest))
+  return(midwest)
+}
+
+# Call the function and save the data
+my_data <- load_and_inspect()
+```
+```{r}
+### 4.3. The “Query” Function
+
+# Function to filter counties by minimum population
+filter_counties_by_population <- function(data, pop_threshold) {
+  result <- data |>
+    filter(poptotal > pop_threshold) |>
+    select(county, state, poptotal) |>
+    arrange(desc(poptotal))
+  
+  return(result)
+}
+
+# Call the function
+large_counties <- filter_counties_by_population(my_data, 500000)
+print(large_counties)
+```
+```{r}
+### 4.4. The “Reporting” Function
+
+generate_state_report <- function(data, state_name) {
+  
+  # Filter data for the selected state
+  state_data <- data |>
+    filter(state == state_name)
+  
+  # Calculate statistics
+  avg_population <- mean(state_data$poptotal, na.rm = TRUE)
+  max_population <- max(state_data$poptotal, na.rm = TRUE)
+  min_population <- min(state_data$poptotal, na.rm = TRUE)
+  county_count <- nrow(state_data)
+  
+  # Print report
+  cat("--- Report for State:", state_name, "---\n")
+  cat("Number of Counties:", county_count, "\n")
+  cat("Average Population:", round(avg_population, 0), "\n")
+  cat("Maximum Population:", max_population, "\n")
+  cat("Minimum Population:", min_population, "\n")
+  cat("------------------------------------------\n\n")
+}
+
+# Call the reporting function for two states
+generate_state_report(my_data, "IL")
+generate_state_report(my_data, "OH")
+```
+
+
+
+
+
